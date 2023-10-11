@@ -1,0 +1,42 @@
+@* @model Message *@
+<div class="nav d-flex ">
+    <div class="left me-auto p-2">
+        <h3>Coding Dojo Wall</h3>
+    </div>
+    <div class="right d-flex align-self-center">
+        <p class="fs-2  mx-5">Welcome @ViewBag.User.FirstName</p>
+        <div class="align-self-center fs-5 mb-3"><a href="/logout">Logout</a></div>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <form action="/message/new" method="post">
+        <div class="mb-3">
+            <label  class="form-label">Post a message </label>
+            <textarea class="form-control " name="MessageText" rows="5"></textarea>
+        </div>
+        <input type="submit" value="Post" class="btn btn-success">
+    </form>
+    <div class="show-messages-comments">
+        @foreach(var m in @ViewBag.AllMessages)
+        {
+            
+            <p class="fs-3">@m.MessageText from @m.Creator.FirstName @m.CreatedAt.ToString("MMMM d, yyyy")</p>
+            <div class="comment-area mx-5">
+            @foreach(var c in @m.HasComments)
+            {
+            <p>@c.User.FirstName @c.User.LastName - @c.CreatedAt.ToString("MMMM d, yyyy")</p>
+            <p>... @c.CommentText   </p>
+            }
+            </div>
+    <div class="make-comment w-50">
+        <form action="/comment/@m.MessageId" method="post">
+            <div class="mb-3 ">
+                <label class="form-label">Post a Comment </label>
+                <textarea class="form-control" name="CommentText" rows="3"></textarea>
+                <input type="submit" value="Comment" class="btn btn-primary mt-3">
+            </div>       
+        </form>
+    </div>
+        }
+</div>
